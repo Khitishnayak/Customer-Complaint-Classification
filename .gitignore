@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+
+# Large Datasets and cache
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.csv
+*.tsv
+*.parquet
+*.sqlite
+.cache/
+
+# Saved Models & Artifacts
+models/*.pkl
+models/*.joblib
+models/*.pt
+models/*.onnx
+!models/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+*.log
