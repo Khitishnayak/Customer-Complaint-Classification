@@ -42,6 +42,23 @@ DEFAULT_CFPB_CATEGORY_MAP = {
     "Virtual currency": "Money Transfers & Digital Currency",
 }
 
+DEFAULT_TWITTER_CATEGORY_MAP = {
+    "AmazonHelp": "E-Commerce & Retail",
+    "AppleSupport": "Tech Support & Devices",
+    "Uber_Support": "Ride-Sharing & Transport",
+    "AmericanAir": "Airlines & Travel",
+    "Delta": "Airlines & Travel",
+    "British_Airways": "Airlines & Travel",
+    "VirginTrains": "Airlines & Travel",
+    "AskPlayStation": "Gaming & Entertainment",
+    "XboxSupport": "Gaming & Entertainment",
+    "SpotifyCares": "Streaming & Digital Media",
+    "hulu_support": "Streaming & Digital Media",
+    "VerizonSupport": "Telecom & Mobile Network",
+    "sprintcare": "Telecom & Mobile Network",
+    "TMobileHelp": "Telecom & Mobile Network",
+}
+
 
 class ComplaintDataLoader:
     def __init__(self, raw_data_dir: str = "data/raw", processed_dir: str = "data/processed"):
@@ -113,6 +130,80 @@ class ComplaintDataLoader:
         df = pd.concat(chunks_collected, ignore_index=True)
         df = self._clean_and_deduplicate(df)
         print(f"Loaded {len(df):,} CFPB complaints across {df['category'].nunique()} categories.")
+        return df
+
+    def load_twitter_support_dataset(
+        self,
+        file_path: Optional[str] = None,
+        max_samples_per_category: Optional[int] = 5000,
+        category_mapping: Optional[Dict[str, str]] = None,
+        chunk_size: int = 50000,
+    ) -> pd.DataFrame:
+        """
+        Loads incoming customer support complaints from Twitter across major brands
+        (Amazon, Apple, Uber, Delta, American Airlines, Spotify, Sprint, etc.)
+        and maps them to cross-industry categories.
+        """
+        import re
+        mapping = category_mapping or DEFAULT_TWITTER_CATEGORY_MAP
+        target_path = Path(file_path) if file_path else self.raw_data_dir / "customer_support_twitter.csv"
+
+        if not target_path.exists():
+            raise FileNotFoundError(f"Twitter dataset not found at {target_path}")
+
+        print(f"Loading Twitter customer support dataset from: {target_path}")
+        handle_pattern = re.compile(r"@([A-Za-z0-9_]+)")
+        chunks_collected = []
+        category_counts = {cat: 0 for cat in set(mapping.values())}
+
+        reader = pd.read_csv(
+            target_path,
+            usecols=["inbound", "text"],
+            chunksize=chunk_size,
+            low_memory=False,
+        )
+
+        for chunk in tqdm(reader, desc="Processing Twitter support chunks"):
+            # Filter inbound customer complaints only
+            inbound = chunk[chunk["inbound"] == True].dropna(subset=["text"]).copy()
+            inbound["text"] = inbound["text"].astype(str)
+
+            # Extract target company handle
+            def extract_category(text: str) -> Optional[str]:
+                match = handle_pattern.search(text)
+                if match:
+                    handle = match.group(1)
+                    return mapping.get(handle)
+                return None
+
+            inbound["category"] = inbound["text"].apply(extract_category)
+            valid = inbound.dropna(subset=["category"]).copy()
+
+            # Clean leading @handle mentions from the text so model learns from complaint semantics
+            valid["text"] = valid["text"].apply(lambda t: handle_pattern.sub("", t, count=1).strip())
+            valid["source"] = "twitter_support"
+
+            if max_samples_per_category:
+                to_keep = []
+                for cat, group in valid.groupby("category"):
+                    current_count = category_counts.get(cat, 0)
+                    needed = max_samples_per_category - current_count
+                    if needed > 0:
+                        selected = group.head(needed)
+                        to_keep.append(selected)
+                        category_counts[cat] += len(selected)
+                if to_keep:
+                    chunks_collected.append(pd.concat(to_keep, ignore_index=True))
+
+                if all(c >= max_samples_per_category for c in category_counts.values()):
+                    print("Reached sample quota for all target Twitter categories.")
+                    break
+            else:
+                chunks_collected.append(valid[["text", "category", "source"]])
+
+        df = pd.concat(chunks_collected, ignore_index=True)
+        df = self._clean_and_deduplicate(df)
+        print(f"Loaded {len(df):,} Twitter customer complaints across {df['category'].nunique()} categories.")
         return df
 
     def add_external_dataset(

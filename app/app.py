@@ -104,22 +104,32 @@ with tab2:
             st.download_button("Download Annotated CSV", csv_data, "classified_complaints.csv", "text/csv")
 
 with tab3:
-    st.subheader("Model Taxonomy & Performance")
+    st.subheader("Model Taxonomy & Multi-Domain Performance")
     st.markdown("""
-    - **Dataset**: Consumer Complaint Database (CFPB / Kaggle)
-    - **Total Records in Database**: 1,280,000+
-    - **Training Set**: Stratified & Deduplicated Balanced Sample (44,178 complaints)
-    - **Model Architecture**: TF-IDF (Unigrams + Bigrams, Sublinear TF) + Calibrated Logistic Regression
-    - **Test Accuracy**: **83.1%**
-    - **Macro F1 Score**: **83.0%**
-    - **Categories**:
-        1. Mortgages & Home Loans
-        2. Credit Cards & Prepaid
-        3. Debt Collection
-        4. Credit Reporting
-        5. Retail Banking & Accounts
-        6. Student Loans
-        7. Personal & Consumer Loans
-        8. Vehicle Loans
-        9. Money Transfers & Digital Currency
+    - **Datasets Combined**:
+        1. **CFPB Consumer Complaint Database** (Financial, Lending & Banking)
+        2. **Twitter Customer Support Database** (Apple, Amazon, Uber, Delta, Spotify, PlayStation, Sprint)
+    - **Total Records Ingested**: 60,928 balanced complaints
+    - **Evaluation Test Set**: 12,102 unseen test complaints
+    - **Model Architecture**: Sublinear TF-IDF (Unigrams + Bigrams, 50,000 features) + Calibrated Softmax Classifier
+    - **Test Accuracy**: **78.4%** across 16 challenging cross-domain classes
+    - **Macro F1 Score**: **78.1%**
+
+    ### Supported Categories (16 Departments):
+    - ✈️ **Airlines & Travel** (Delta, British Airways, Virgin, American Airlines)
+    - 📦 **E-Commerce & Retail** (Amazon orders, packages, deliveries, refunds)
+    - 📱 **Tech Support & Devices** (Apple hardware, iOS updates, screen issues)
+    - 🚗 **Ride-Sharing & Transport** (Uber trips, driver complaints, fares)
+    - 🎮 **Gaming & Entertainment** (PlayStation Network, Xbox, purchases)
+    - 🎵 **Streaming & Digital Media** (Spotify, Hulu subscriptions & playback)
+    - 📶 **Telecom & Mobile Network** (Verizon, Sprint, T-Mobile, signal/billing)
+    - 💳 **Credit Cards & Prepaid** (Card disputes, unauthorized charges)
+    - 🏡 **Mortgages & Home Loans** (Escrow calculations, foreclosures, servicing)
+    - 🏦 **Retail Banking & Accounts** (Checking, savings, overdraft fees, ATM)
+    - 🎓 **Student Loans** (Repayments, interest rates, servicing disputes)
+    - 💸 **Money Transfers & Digital Currency** (Wire transfers, PayPal, crypto)
+    - 📞 **Debt Collection** (Harassment, disputed collector claims)
+    - 📑 **Credit Reporting** (Credit bureau errors, inaccuracies)
+    - 💵 **Personal & Consumer Loans** (Payday loans, personal lines of credit)
+    - 🚘 **Vehicle Loans** (Auto lease and financing)
     """)
