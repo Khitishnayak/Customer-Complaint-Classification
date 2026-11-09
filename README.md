@@ -45,20 +45,28 @@ CUSTOMER COMPLAINT/
 
 ## 📊 Pre-Trained Benchmark Results
 
-Trained on a balanced sample of 44,178 real customer complaints:
+Trained on **60,928 complaints** across 16 multi-industry departments (CFPB Financial + Twitter Tech/Consumer Support) and evaluated on **12,102 unseen test tickets**:
 
 | Category | Precision | Recall | F1-Score |
 |---|---|---|---|
-| **Mortgages & Home Loans** | 0.93 | 0.93 | **0.93** |
-| **Student Loans** | 0.93 | 0.89 | **0.91** |
-| **Money Transfers & Virtual Currency** | 0.90 | 0.84 | **0.87** |
-| **Credit Cards & Prepaid** | 0.82 | 0.83 | **0.83** |
-| **Retail Banking & Accounts** | 0.80 | 0.86 | **0.83** |
-| **Vehicle Loans** | 0.79 | 0.82 | **0.80** |
-| **Credit Reporting** | 0.77 | 0.79 | **0.78** |
-| **Debt Collection** | 0.77 | 0.80 | **0.78** |
-| **Personal & Consumer Loans** | 0.77 | 0.71 | **0.74** |
-| **Overall Accuracy** | | | **83.06%** |
+| **Mortgages & Home Loans** | 0.93 | 0.91 | **0.92** |
+| **Student Loans** | 0.94 | 0.89 | **0.91** |
+| **Money Transfers & Crypto** | 0.89 | 0.85 | **0.87** |
+| **Retail Banking & Accounts** | 0.81 | 0.87 | **0.84** |
+| **Credit Cards & Prepaid** | 0.82 | 0.84 | **0.83** |
+| **Vehicle Loans** | 0.84 | 0.83 | **0.83** |
+| **Debt Collection** | 0.79 | 0.83 | **0.81** |
+| **Airlines & Travel** | 0.80 | 0.80 | **0.80** |
+| **Credit Reporting** | 0.77 | 0.77 | **0.77** |
+| **Personal & Consumer Loans** | 0.79 | 0.76 | **0.77** |
+| **Gaming & Entertainment** | 0.73 | 0.72 | **0.73** |
+| **E-Commerce & Retail** | 0.70 | 0.74 | **0.72** |
+| **Tech Support & Devices** | 0.73 | 0.71 | **0.72** |
+| **Ride-Sharing & Transport** | 0.72 | 0.67 | **0.70** |
+| **Streaming & Digital Media** | 0.66 | 0.66 | **0.66** |
+| **Telecom & Mobile Networks** | 0.59 | 0.65 | **0.62** |
+| **Overall Test Accuracy** | | | **78.44%** |
+| **Macro F1 Score** | | | **78.10%** |
 
 ---
 
