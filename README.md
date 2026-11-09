@@ -1,5 +1,7 @@
 # AI-Powered Customer Complaint Classification & Triaging System
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Khitishnayak/Customer-Complaint-Classification/blob/main/notebooks/customer_complaint_finetuning.ipynb)
+
 An end-to-end NLP system that automatically reads incoming customer complaints, classifies them into relevant department/product categories, calculates prediction confidence, and detects escalation urgency (legal threats, fraud, eviction, foreclosure).
 
 ---
