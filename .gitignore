@@ -14,7 +14,9 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/complaints_colab_sample.csv
 *.csv
+!data/processed/complaints_colab_sample.csv
 *.tsv
 *.parquet
 *.sqlite
